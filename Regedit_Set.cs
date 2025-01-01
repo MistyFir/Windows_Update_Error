@@ -38,7 +38,10 @@ namespace Windows_Update_Error
         {
             try
             {
-                File.WriteAllText("Error_m1.txt",a, Encoding.UTF8);
+                StreamWriter writer = new StreamWriter("Error_m1.txt", false, Encoding.UTF8);
+                writer.Write(a);
+                writer.Flush();
+                writer.Close();
             }
             catch(Exception ex)
             {
@@ -51,7 +54,17 @@ namespace Windows_Update_Error
             FileInfo fileInfo = new FileInfo(path);
             if(fileInfo.Exists==false)
             {
-                File.WriteAllText(path,"114514",Encoding.UTF8);
+                try
+                {
+                    StreamWriter writer = new StreamWriter(path, false, Encoding.UTF8);
+                    writer.Write("114514");
+                    writer.Flush();
+                    writer.Close();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             StreamReader sr = new StreamReader(path,Encoding.UTF8);
             string read=sr.ReadToEnd();
@@ -61,7 +74,7 @@ namespace Windows_Update_Error
         public void UAC_OFF()
         {
             RegistryKey key = Registry.LocalMachine;
-            RegistryKey software = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",true);
+            RegistryKey software = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", true);
             if (software == null) 
             {
                 software=key.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System");

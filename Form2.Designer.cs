@@ -66,7 +66,6 @@
             label1.Size = new Size(867, 83);
             label1.TabIndex = 2;
             label1.Text = "你的电脑出现问题，无法修复";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -77,7 +76,6 @@
             label2.Size = new Size(426, 249);
             label2.TabIndex = 3;
             label2.Text = "TvT";
-            label2.Click += label2_Click;
             // 
             // Form2
             // 
@@ -94,7 +92,6 @@
             Name = "Form2";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form2";
-            Load += Form2_Load;
             ResumeLayout(false);
             PerformLayout();
         }

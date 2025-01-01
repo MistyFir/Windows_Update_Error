@@ -61,7 +61,6 @@ namespace Windows_Update_Error
                     test1.Shutdown_PC();
                     break;
                 case str2:
-                    regedit1_Start = regedit1.Start_Detection();
                     regedit1_Start = "7453567";
                     regedit1.Start_Update(regedit1_Start);
                     // Display a message box indicating that the update has failed and Windows cannot repair the computer, thus informing the user of the problem occurred during the update process.
@@ -70,7 +69,6 @@ namespace Windows_Update_Error
                     Application.Run(new Form2());
                     break;
                 case str3:
-                    regedit1_Start = regedit1.Start_Detection();
                     regedit1_Start = "84634846";
                     regedit1.Start_Update(regedit1_Start);
                     // Display a message box to inform the user that an unknown error has occurred and Windows components cannot be loaded normally, helping the user understand the reason for the failure.
@@ -78,7 +76,6 @@ namespace Windows_Update_Error
                     Application.Run(new Form2());
                     break;
                 case str4:
-                    regedit1_Start = regedit1.Start_Detection();
                     regedit1_Start = "847327473";
                     regedit1.Start_Update(regedit1_Start);
                     // Display a message box stating that the computer cannot restore important Windows components, letting the user know the problem existing in the system functionality.

